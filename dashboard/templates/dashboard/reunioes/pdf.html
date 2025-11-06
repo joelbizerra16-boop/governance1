@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda de Reuniões</title>
+    <style>
+        @page { size: A4 landscape; margin: 16mm 16mm; }
+        body { font-family: Arial, sans-serif; color: #111; font-size: 11pt; }
+        .wrap { width: 100%; }
+        .title { text-align: center; font-size: 20pt; margin: 0 0 8pt 0; font-weight: bold; }
+        .subtitle { text-align: center; color: #555; font-size: 10pt; margin: 0 0 14pt 0; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #1e3a8a; padding: 7pt 8pt; }
+        th { background: #1e3a8a; color: #fff; font-weight: 700; font-size: 10.5pt; }
+        tr:nth-child(even) td { background: #f6f8fb; }
+        .center { text-align: center; }
+        .right { text-align: right; }
+        .muted { color: #666; }
+    </style>
+    <!-- Template simples e compatível com xhtml2pdf (sem flex/grid) -->
+</head>
+<body>
+    <div class="wrap">
+        <div class="title">Agenda de Reuniões</div>
+        <div class="subtitle">Relatório consolidado</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 24%">Título</th>
+                    <th class="center" style="width: 12%">Data</th>
+                    <th class="center" style="width: 12%">Próxima</th>
+                    <th class="center" style="width: 10%">Hora</th>
+                    <th class="center" style="width: 12%">Faltam</th>
+                    <th class="center" style="width: 14%">Recorrência</th>
+                    <th class="center" style="width: 14%">Local</th>
+                    <th style="width: 12%">Participantes</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for r in reunioes %}
+                <tr>
+                    <td>{{ r.titulo|default:"-" }}</td>
+                    <td class="center">{% if r.data %}{{ r.data|date:'d/m/Y' }}{% else %}-{% endif %}</td>
+                    <td class="center">{% if r.proxima %}{{ r.proxima|date:'d/m/Y' }}{% else %}-{% endif %}</td>
+                    <td class="center">{% if r.hora %}{{ r.hora|time:'H:i' }}{% else %}-{% endif %}</td>
+                    <td class="center">{{ r.faltam|default:"-" }}</td>
+                    <td class="center">{{ r.recorrencia|default:"-" }}</td>
+                    <td class="center">{{ r.local|default:"-" }}</td>
+                    <td>{{ r.participantes|default:"-" }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="7" class="center muted">Nenhuma reunião cadastrada.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

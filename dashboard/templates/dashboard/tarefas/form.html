@@ -1,0 +1,113 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}{% if tarefa %}Editar Tarefa{% else %}Criar Tarefa{% endif %}{% endblock %}
+
+{% block content %}
+    <h2 class="titulo-form">{% if tarefa %}Editar Tarefa{% else %}Criar Tarefa{% endif %}</h2>
+    {% if erro or erro_data %}
+    <div class="alerts" style="margin: 0 auto 12px auto; max-width: 980px; background:#1e293b; color:#fecaca; border:1px solid #7f1d1d; padding:10px 12px; border-radius:8px;">
+        {{ erro|default:erro_data }}
+    </div>
+    {% endif %}
+    <form method="post" class="form-projeto-tres-colunas">
+        {% csrf_token %}
+        <div class="form-buttons form-buttons-top">
+            <button type="submit" class="btn-salvar">Salvar</button>
+            <a href="/tarefas/" class="btn-voltar">Cancelar</a>
+        </div>
+        <div class="form-projeto-grid form-grid-3">
+            <div class="form-section-title form-span-3">
+                {% if tarefa %}Editar Tarefa / {{ tarefa.nome }}{% else %}Nova Tarefa / PLC{% endif %}
+            </div>
+            <!-- Linha 1 -->
+            <div class="form-group">
+                <label for="titulo">Título:</label>
+                <input id="titulo" type="text" name="nome" value="{{ tarefa.nome|default:'' }}" placeholder="Digite o título da tarefa" required>
+            </div>
+            <div class="form-group">
+                <label for="data_inicio">Data início:</label>
+                <input id="data_inicio" type="date" name="data_inicio" value="{% if tarefa and tarefa.data_inicio %}{{ tarefa.data_inicio|date:'Y-m-d' }}{% endif %}" required>
+            </div>
+            <div class="form-group">
+                <label for="projeto-select">Projeto:</label>
+                <select name="projeto" id="projeto-select" required>
+                    {% for projeto in projetos %}
+                    <option value="{{ projeto.id }}" data-nome="{{ projeto.nome }}" data-fim="{{ projeto.data_fim|date:'Y-m-d' }}" {% if tarefa and tarefa.projeto.id == projeto.id %}selected{% endif %}>{{ projeto.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <!-- Linha 2 -->
+            <div class="form-group">
+                <label for="responsavel">Responsável:</label>
+                <input id="responsavel" type="text" name="responsavel" value="{{ tarefa.responsavel|default:'' }}" placeholder="Nome do responsável" required>
+            </div>
+            <div class="form-group">
+                <label for="data_fim">Data fim:</label>
+                <input id="data_fim" type="date" name="data_fim" value="{% if tarefa and tarefa.data_fim %}{{ tarefa.data_fim|date:'Y-m-d' }}{% endif %}" required>
+            </div>
+            <div class="form-group">
+                <label for="unidade-select">Unidade:</label>
+                <select name="unidade" id="unidade-select" required>
+                    <option value="" disabled {% if not tarefa or not tarefa.projeto.unidade %}selected{% endif %}>Selecione...</option>
+                    <option value="Santo André" {% if tarefa and tarefa.projeto.unidade == 'Santo André' %}selected{% endif %}>Santo André</option>
+                    <option value="Gravataí" {% if tarefa and tarefa.projeto.unidade == 'Gravataí' %}selected{% endif %}>Gravataí</option>
+                    <option value="Todas" {% if tarefa and tarefa.projeto.unidade == 'Todas' %}selected{% endif %}>Todas</option>
+                </select>
+            </div>
+            <!-- Linha 3 -->
+            <div class="form-group" style="grid-column: 1 / span 3; text-align:left;">
+                <label for="observacao" style="display:block; text-align:left;">Observação:</label>
+                <textarea id="observacao" name="observacao" rows="3" style="width:100%; resize:vertical; min-height:70px; text-align:left;">{% if tarefa %}{{ tarefa.observacao|default:'' }}{% endif %}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select name="status" id="status" required>
+                    <option value="0" {% if tarefa and tarefa.status == '0%' %}selected{% endif %}>0%</option>
+                    <option value="25" {% if tarefa and tarefa.status == '25%' %}selected{% endif %}>25%</option>
+                    <option value="50" {% if tarefa and tarefa.status == '50%' %}selected{% endif %}>50%</option>
+                    <option value="75" {% if tarefa and tarefa.status == '75%' %}selected{% endif %}>75%</option>
+                    <option value="100" {% if tarefa and tarefa.status == '100%' %}selected{% endif %}>100%</option>
+                </select>
+            </div>
+        </div>
+    </form>
+    <script>
+        (function() {
+            const form = document.querySelector('form');
+            if (!form) return;
+            function showError(msg){
+                let alert = document.getElementById('client-error');
+                if(!alert){
+                    alert = document.createElement('div');
+                    alert.id = 'client-error';
+                    alert.style.margin = '0 auto 12px auto';
+                    alert.style.maxWidth = '980px';
+                    alert.style.background = '#1e293b';
+                    alert.style.color = '#fecaca';
+                    alert.style.border = '1px solid #7f1d1d';
+                    alert.style.padding = '10px 12px';
+                    alert.style.borderRadius = '8px';
+                    form.parentNode.insertBefore(alert, form);
+                }
+                alert.textContent = msg;
+            }
+            form.addEventListener('submit', function(e){
+                const di = form.querySelector('input[name="data_inicio"]').value;
+                const df = form.querySelector('input[name="data_fim"]').value;
+                const sel = form.querySelector('#projeto-select');
+                const opt = sel ? sel.options[sel.selectedIndex] : null;
+                const pf = opt ? opt.getAttribute('data-fim') : null;
+                if(di && df && di > df){
+                    e.preventDefault();
+                    showError('A data início da tarefa não pode ser maior que a data fim da tarefa.');
+                    return;
+                }
+                if(df && pf && df > pf){
+                    e.preventDefault();
+                    showError('A data fim da tarefa é superior à data de conclusão do projeto selecionado.');
+                    return;
+                }
+            });
+        })();
+    </script>
+{% endblock %}

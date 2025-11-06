@@ -1,0 +1,20 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Excluir Tarefa{% endblock %}
+
+{% block content %}
+    <h2 class="titulo-form">Excluir Tarefa</h2>
+    <div class="projeto-detalhes-grid">
+        <div class="projeto-coluna">
+            <p><strong>Título:</strong> {{ tarefa.nome }}</p>
+            <p><strong>Projeto:</strong> {{ tarefa.projeto.nome }} (ID {{ tarefa.projeto.id }})</p>
+            <p><strong>Responsável:</strong> {{ tarefa.responsavel }}</p>
+        </div>
+    </div>
+    <form method="post" class="form-buttons">
+        {% csrf_token %}
+        <p class="muted">Tem certeza que deseja excluir esta tarefa?</p>
+        <button type="submit" class="btn-acao">Excluir</button>
+        <a href="/tarefas/" class="btn-voltar">Cancelar</a>
+    </form>
+{% endblock %}

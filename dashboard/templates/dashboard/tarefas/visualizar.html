@@ -1,0 +1,36 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Visualizar Tarefa{% endblock %}
+
+{% block content %}
+    <h2 class="titulo-form">Visualizar Tarefa</h2>
+    <div class="projeto-detalhes-grid">
+        <div class="projeto-coluna">
+            <p><strong>ID da Tarefa:</strong> {{ tarefa.id }}</p>
+            <p><strong>Título:</strong> {{ tarefa.nome }}</p>
+            <p><strong>Projeto:</strong> {{ tarefa.projeto.nome }}</p>
+            <p><strong>Responsável:</strong> {{ tarefa.responsavel }}</p>
+            <p><strong>Data início:</strong> {{ tarefa.data_inicio }}</p>
+            <p><strong>Data fim:</strong> {{ tarefa.data_fim }}</p>
+            <p><strong>Conclusão:</strong>
+                {% if tarefa.status == '0%' %}
+                    <span class="status-badge status-vermelho">{{ tarefa.status }}</span>
+                {% elif tarefa.status == '25%' or tarefa.status == '50%' %}
+                    <span class="status-badge status-amarelo">{{ tarefa.status }}</span>
+                {% elif tarefa.status == '75%' %}
+                    <span class="status-badge status-azul">{{ tarefa.status }}</span>
+                {% elif tarefa.status == '100%' %}
+                    <span class="status-badge status-verde">{{ tarefa.status }}</span>
+                {% else %}
+                    <span class="status-badge">{{ tarefa.status }}</span>
+                {% endif %}
+            </p>
+            <p><strong>Observação:</strong> <span style="white-space:pre-wrap;">{{ tarefa.observacao|default:'-' }}</span></p>
+        </div>
+    </div>
+    <div class="form-buttons">
+        <a href="/tarefas/{{ tarefa.id }}/editar/" class="btn-acao">Editar</a>
+        <a href="/tarefas/{{ tarefa.id }}/excluir/" class="btn-acao">Excluir</a>
+        <a href="/tarefas/" class="btn-voltar">Voltar</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Tarefas{% endblock %}
+{% block content %}
+<div class="projetos-container">
+    <h2 class="projetos-titulo" style="text-align:left;">Tarefas</h2>
+    <a href="/tarefas/criar/" class="btn-criar-projeto" style="margin-bottom:18px;display:inline-block;">+ Adicionar Tarefa</a>
+    <form method="get" class="filtros filtros-row" onsubmit="return filtrarSomentePesquisa(this)">
+        <div style="display:flex;width:100%;gap:16px;align-items:center;">
+            <div class="filtros-col" style="flex:0 0 auto;">
+                <select name="ano" id="ano-select" style="min-width:90px;" onchange="this.form.submit();">
+                    <option value="">Ano</option>
+                    {% for a in anos %}
+                        <option value="{{ a }}" {% if ano == a|stringformat:'s' %}selected{% endif %}>{{ a }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filtros-col" style="flex:0 0 auto; margin-left:12px;">
+                <input type="text" name="q" value="{{ q|default:'' }}" placeholder="Pesquisar (título, projeto, responsável, status)" style="min-width:260px;" onkeydown="if(event.key==='Enter'){event.target.form.setAttribute('data-search','1');}">
+            </div>
+            <div style="flex:1 1 auto;"></div>
+            <div class="filtros-botoes" style="flex:0 0 auto;align-self:center; display:flex; gap:12px; align-items:center;">
+                <button type="submit" name="sort" value="data_inicio_asc" class="btn-filtrar">Classificar por Data Início ↑</button>
+                <button type="submit" name="sort" value="data_fim_asc" class="btn-filtrar">Classificar por Data Fim ↑</button>
+            </div>
+        </div>
+    </form>
+    <script>
+    function filtrarSomentePesquisa(form) {
+        if(form.getAttribute('data-search')==='1') {
+            // Remove todos os campos exceto 'q' ao submeter
+            Array.from(form.elements).forEach(function(el){
+                if(el.name && el.name !== 'q') el.value = '';
+            });
+            form.removeAttribute('data-search');
+        }
+        return true;
+    }
+    </script>
+    <div class="tabela-wrapper">
+        <table class="projetos-lista" style="text-align:left;">
+            <thead>
+                <tr>
+                    <th style="text-align:left;">ID</th>
+                    <th style="text-align:left;">Título</th>
+                    <th style="text-align:left;">Projeto</th>
+                    <th style="text-align:left;">Data Início</th>
+                    <th style="text-align:left;">Data Fim</th>
+                    <th style="text-align:left;">Status</th>
+                    <th style="text-align:left;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tarefa in tarefas %}
+                <tr>
+                    <td style="text-align:left;">{{ tarefa.id }}</td>
+                    <td style="text-align:left;">{{ tarefa.nome }}</td>
+                    <td style="text-align:left;">{{ tarefa.projeto.nome }} <span class="muted" style="font-size:0.95em;">(ID: {{ tarefa.projeto.id }})</span></td>
+                    <td style="text-align:left;">{{ tarefa.data_inicio|date:'d/m/Y' }}</td>
+                    <td style="text-align:left;">{{ tarefa.data_fim|date:'d/m/Y' }}</td>
+                    <td style="text-align:left;">
+                        {% if tarefa.status == '0%' %}
+                            <span class="status-badge status-vermelho">{{ tarefa.status }}</span>
+                        {% elif tarefa.status == '25%' or tarefa.status == '50%' %}
+                            <span class="status-badge status-amarelo">{{ tarefa.status }}</span>
+                        {% elif tarefa.status == '75%' %}
+                            <span class="status-badge status-azul">{{ tarefa.status }}</span>
+                        {% elif tarefa.status == '100%' %}
+                            <span class="status-badge status-verde">{{ tarefa.status }}</span>
+                        {% else %}
+                            <span class="status-badge">{{ tarefa.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td style="text-align:left; display:flex; gap:8px;">
+                        <a href="/tarefas/{{ tarefa.id }}/editar/" title="Editar Tarefa" class="btn-acao" style="padding:4px 8px;display:inline-flex;align-items:center;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="#2563eb" d="M4 21h17v2H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h2v2H4v17zm16.707-14.293-2.414-2.414a1 1 0 0 0-1.414 0l-9.586 9.586A1 1 0 0 0 7 15v2a1 1 0 0 0 1 1h2a1 1 0 0 0 .707-.293l9.586-9.586a1 1 0 0 0 0-1.414zM9.414 16H9v-.414l8.293-8.293.414.414L9.414 16zm10.293-10.293a3 3 0 0 1 0 4.242l-1.414 1.414-4.242-4.242 1.414-1.414a3 3 0 0 1 4.242 0z"/></svg>
+                        </a>
+                        <a href="/tarefas/{{ tarefa.id }}/excluir/" title="Excluir Tarefa" class="btn-acao" style="padding:4px 8px;display:inline-flex;align-items:center;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 19c0 1.104.896 2 2 2h8c1.104 0 2-.896 2-2V7H6v12zm13-15h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="#e11d48"/></svg>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                    <tr><td colspan="6" style="text-align:left;color:#888;">Nenhuma tarefa encontrada.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+function toggleConcluida(tarefaId, btn) {
+    btn.disabled = true;
+    fetch(`/tarefas/${tarefaId}/toggle_concluida/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    }).then(resp => {
+        if (resp.ok) {
+            if (btn.classList.contains('sim')) {
+                btn.classList.remove('sim');
+                btn.classList.add('nao');
+                btn.textContent = 'Não';
+            } else {
+                btn.classList.remove('nao');
+                btn.classList.add('sim');
+                btn.textContent = 'Sim';
+            }
+        } else {
+            alert('Não foi possível alterar. Permissão ou erro.');
+        }
+        btn.disabled = false;
+    }).catch(() => {
+        alert('Erro de conexão.');
+        btn.disabled = false;
+    });
+}
+</script>
+{% endblock %}

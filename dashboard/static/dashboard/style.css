@@ -1,0 +1,764 @@
+/* Cores para status da tarefa */
+.status-badge {
+    display: inline-block;
+    min-width: 38px;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.98em;
+    text-align: center;
+    color: #fff;
+}
+.status-vermelho {
+    background: #e53935;
+}
+.status-amarelo {
+    background: #fbc02d;
+    color: #222;
+}
+.status-azul {
+    background: #1976d2;
+}
+.status-verde {
+    background: #388e3c;
+}
+.form-tarefa-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 40px;
+    max-width: 960px;
+    margin: 0 auto;
+    background: var(--surface-0);
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(24,119,242,0.06);
+    padding: 32px 28px;
+}
+.form-coluna {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.form-tarefa-grid .form-coluna[style*="span 2"] {
+    grid-column: 1 / span 2;
+}
+@media (max-width: 900px) {
+    .form-tarefa-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    .form-tarefa-grid .form-coluna[style*="span 2"] {
+        grid-column: 1;
+    }
+}
+/* Formulário de projeto em duas colunas elegante */
+.form-projeto-duas-colunas {
+    max-width: 900px;
+    margin: 0 auto 32px auto;
+}
+.form-projeto-tres-colunas {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto 32px auto;
+}
+/* Título da seção do formulário */
+.form-section-title {
+    margin-bottom: 18px;
+    background: var(--surface-50);
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-weight: 700;
+    font-size: 1.12rem;
+    color: var(--primary-600);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.form-projeto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    background: var(--surface-0);
+    border-radius: 16px;
+    box-shadow: 0 2px 16px 0 rgba(38, 50, 56, 0.08);
+    padding: 32px 40px;
+}
+.form-projeto-grid.form-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px 32px;
+    align-items: start;
+}
+.form-coluna {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.form-projeto-grid label {
+    font-weight: 600;
+    color: #2574e8;
+    margin-bottom: 4px;
+}
+.form-projeto-grid input,
+.form-projeto-grid select,
+.form-projeto-grid textarea {
+    padding: 10px 14px;
+    border: 1px solid #e6eaf0;
+    border-radius: 6px;
+    background: var(--surface-50);
+    font-size: 1rem;
+    width: 100%;
+}
+.form-buttons {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+}
+/* Botão de ação para coluna Concluída */
+.btn-concluida {
+    padding: 6px 18px;
+    border-radius: 6px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-concluida.sim {
+    background: #eaf2fb;
+    color: #2574e8;
+}
+.btn-concluida.nao {
+    background: #fbeaea;
+    color: #e82525;
+}
+.btn-concluida.bloqueado {
+    background: #f3f3f3;
+    color: #aaa;
+    cursor: not-allowed;
+    border: 1px solid #ddd;
+}
+.btn-concluida:active {
+    filter: brightness(0.95);
+}
+/* Grid elegante para detalhes do projeto */
+.projeto-detalhes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    background: var(--surface-0);
+    border-radius: 16px;
+    box-shadow: 0 2px 16px 0 rgba(38, 50, 56, 0.08);
+    padding: 32px 40px;
+    margin-bottom: 32px;
+    max-width: 900px;
+}
+.projeto-coluna {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.projeto-detalhes-grid p {
+    font-size: 1.08rem;
+    color: var(--text-900);
+    margin: 0;
+}
+.projeto-detalhes-grid strong {
+    color: #2574e8;
+    font-weight: 600;
+}
+.projeto-detalhes-grid ul {
+    margin: 8px 0 0 0;
+    padding-left: 18px;
+}
+.btn-tarefas {
+    display: inline-block;
+    margin-top: 12px;
+    background: #eaf2fb;
+    color: #2574e8;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.btn-tarefas:hover {
+    background: #d4e6fa;
+}
+/* Formulário de Tarefa - Vertical */
+.form-tarefa-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 960px; /* permite duas colunas lado a lado */
+    width: 100%;
+    margin: 0 auto;
+    background: var(--surface-0);
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(24,119,242,0.06);
+    padding: 32px 28px;
+}
+.form-grid-3 .form-span-3 {
+    grid-column: 1 / span 3;
+}
+@media (max-width: 980px) {
+    .form-projeto-grid.form-grid-3 {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+    .form-grid-3 .form-span-3 {
+        grid-column: 1;
+    }
+}
+/* Removido: estilos antigos de submenu lateral (.has-submenu/.submenu) */
+/* Formulário de Projeto - Grid Distribuído */
+/* Formulário de tarefas: campos em coluna, espaçamento vertical */
+.form-tarefa-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 32px;
+    max-width: 960px; /* consistente com o container acima */
+    width: 100%;
+}
+.form-tarefa-vertical .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.form-tarefa-vertical label {
+    font-weight: 600;
+    color: #2574e8;
+    margin-bottom: 4px;
+}
+.form-tarefa-vertical input,
+.form-tarefa-vertical select {
+    padding: 10px 14px;
+    border: 1px solid #e6eaf0;
+    border-radius: 6px;
+    background: var(--surface-50);
+    font-size: 1rem;
+}
+.form-tarefa-vertical .form-buttons {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+}
+/* Botão cancelar igual ao projetos */
+.btn-cancelar {
+    background: #eaf2fb;
+    color: #2574e8;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 24px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.btn-cancelar:hover {
+    background: #d4e6fa;
+}
+/* removed stray orphaned declarations to prevent CSS parse errors */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 220px;
+    margin-bottom: 0;
+}
+.form-group label {
+    font-weight: 500;
+    color: #1877F2;
+    margin-bottom: 6px;
+}
+.form-group input,
+.form-group select {
+    padding: 7px 10px;
+    border-radius: 5px;
+    border: 1px solid #dbeafe;
+    font-size: 1em;
+    background: var(--surface-50);
+    color: var(--text-900);
+}
+.form-buttons {
+    display: flex;
+    gap: 18px;
+    margin-top: 18px;
+    justify-content: flex-end;
+}
+.form-buttons-top {
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+.form-buttons button {
+    background: #1877F2;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.form-buttons button:hover {
+    background: #1456A0;
+}
+.btn-cancelar {
+    background: #e3f0ff;
+    color: #1877F2;
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-size: 1em;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+}
+.btn-cancelar:hover {
+    background: #1877F2;
+    color: #fff;
+}
+/* Listagem de Projetos - Moderno e Delicado */
+.projetos-container {
+    background: var(--surface-0);
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(24,119,242,0.06);
+    padding: 32px 28px;
+    max-width: 1100px;
+    min-width: 900px;
+    margin: 0 auto;
+}
+.projetos-titulo {
+    font-size: 2em;
+    font-weight: 700;
+    color: #1877F2;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+}
+.filtros .filtro-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.filtro-select, .filtro-input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #dbeafe;
+    font-size: 1em;
+    background: var(--surface-50);
+    color: var(--text-900);
+    min-width: 120px;
+}
+.btn-filtrar {
+    background: #1877F2;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 18px;
+}
+.btn-filtrar:hover {
+    background: #1456A0;
+}
+.tabela-wrapper {
+    overflow-x: auto;
+    margin-top: 8px;
+}
+.projetos-lista {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--surface-0);
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(24,119,242,0.04);
+}
+.projetos-lista th {
+    background: #e3f0ff;
+    color: #1877F2;
+    font-weight: 600;
+    padding: 12px 8px;
+    border-bottom: 2px solid #dbeafe;
+    font-size: 1em;
+}
+.projetos-lista td {
+    padding: 10px 8px;
+    font-size: 0.98em;
+    color: #333;
+    border-bottom: 1px solid #e3f0ff;
+}
+.projetos-lista tr:last-child td {
+    border-bottom: none;
+}
+.btn-acao {
+    background: #e3f0ff;
+    color: #1877F2;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 12px;
+    font-size: 0.97em;
+    font-weight: 500;
+    margin-right: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-acao:hover {
+    background: #1877F2;
+    color: #fff;
+}
+.btn-criar-projeto {
+    background: #1877F2;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-size: 1em;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    box-shadow: 0 1px 4px rgba(24,119,242,0.07);
+}
+.btn-criar-projeto:hover {
+    background: #1456A0;
+}
+.status-bar {
+    background: #e3f0ff;
+    border-radius: 6px;
+    height: 22px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    min-width: 80px;
+}
+.status-fill {
+    background: linear-gradient(90deg, #1877F2 80%, #1456A0 100%);
+    height: 100%;
+    border-radius: 6px 0 0 6px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+.status-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: #1877F2;
+    font-weight: 600;
+    font-size: 0.97em;
+    z-index: 2;
+}
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--surface-50);
+}
+
+/* Botões modernos e elegantes */
+.btn-modern {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.06);
+    background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+    will-change: transform, box-shadow;
+}
+.btn-modern:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.28);
+    background: linear-gradient(180deg, #2d6df0 0%, #2250d0 100%);
+}
+.btn-modern:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);
+}
+.btn-modern--secondary {
+    background: linear-gradient(180deg, #0ea5e9 0%, #0284c7 100%);
+    box-shadow: 0 6px 18px rgba(14, 165, 233, 0.25);
+}
+.btn-modern--secondary:hover {
+    background: linear-gradient(180deg, #18b0f1 0%, #0a8fd0 100%);
+    box-shadow: 0 10px 24px rgba(14, 165, 233, 0.28);
+}
+.btn-modern svg {
+    display: inline-block;
+}
+.sidebar {
+    width: 260px;
+    background: #1877F2;
+    color: #fff;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
+}
+.project-title {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+}
+.filter {
+    margin-bottom: 24px;
+}
+.filter label {
+    font-weight: 500;
+}
+.filter select {
+    margin-top: 8px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: none;
+}
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+}
+.sidebar nav ul li {
+    margin: 16px 0;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background 0.2s;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+.sidebar nav ul li:hover {
+    background: #1456A0;
+}
+.main-content {
+    margin-left: 0; /* sem sidebar */
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.summary {
+    background: var(--surface-0);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    margin-bottom: 32px;
+}
+.progress-bar {
+    background: #eee;
+    border-radius: 6px;
+    height: 28px;
+    width: 100%;
+    margin: 12px 0 24px 0;
+    overflow: hidden;
+}
+.progress {
+    background: #1877F2;
+    color: #fff;
+    height: 100%;
+    text-align: center;
+    line-height: 28px;
+    font-weight: 600;
+    border-radius: 6px 0 0 6px;
+}
+.alerts {
+    color: #BA2121;
+    font-weight: 500;
+}
+.shortcuts {
+    background: var(--surface-0);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+button.btn-shortcut {
+    background: linear-gradient(90deg, #1877F2 80%, #1456A0 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 8px 16px;
+    margin: 7px 0;
+    font-size: 0.98em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s;
+    width: 100%;
+    text-align: left;
+    box-shadow: 0 1px 4px rgba(24,119,242,0.07);
+    letter-spacing: 0.3px;
+    outline: none;
+}
+button.btn-shortcut:hover {
+    background: linear-gradient(90deg, #1456A0 80%, #1877F2 100%);
+    box-shadow: 0 4px 16px rgba(24,119,242,0.12);
+}
+.shortcuts button {
+    background: #1877F2;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 24px;
+    margin: 8px 12px 8px 0;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.shortcuts button:hover {
+    background: #1456A0;
+}
+/* Estilos para o formulário de reuniões */
+.container-form {
+    background: var(--surface-0);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #e0e7ef;
+    max-width: 900px;
+    margin: 32px auto;
+    padding: 32px 40px;
+}
+.titulo-form {
+    color: #2574e8;
+    font-size: 2rem;
+    margin-bottom: 24px;
+    font-weight: 700;
+    text-align: left;
+}
+.formulario-profissional {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 40px;
+    align-items: start;
+}
+.form-grid > div {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.form-group label {
+    font-weight: 500;
+    color: #2574e8;
+    margin-bottom: 2px;
+}
+.form-group input, .form-group textarea, .form-group select {
+    border: 2px solid #174ea6;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 1rem;
+    background: var(--surface-50);
+    color: var(--text-900);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 4px rgba(23, 78, 166, 0.12);
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: #2574e8;
+    box-shadow: 0 0 0 2px #e0e7ef;
+    outline: none;
+}
+.form-buttons {
+    display: flex;
+    gap: 18px;
+    margin-top: 24px;
+}
+.btn-salvar {
+    background: #2574e8;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 32px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-salvar:hover {
+    background: #174ea6;
+}
+.btn-voltar {
+    background: #e0e7ef;
+    color: #2574e8;
+    border-radius: 6px;
+    padding: 10px 32px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    border: none;
+    display: inline-block;
+    transition: background 0.2s;
+}
+.btn-voltar:hover {
+    background: #cfd8e3;
+}
+.tabela-reunioes {
+    width: 90%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    text-align: center;
+}
+.tabela-reunioes th, .tabela-reunioes td {
+    text-align: center;
+    vertical-align: middle;
+}
+.card-projeto {
+    max-width: 1100px;
+    min-width: 900px;
+    margin: 32px auto;
+    padding: 32px 40px;
+    background: var(--surface-0);
+    border-radius: 18px;
+    box-shadow: 0 2px 16px #e0e7ef;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.card-projeto .coluna {
+    flex: 1 1 320px;
+    min-width: 320px;
+    margin: 0 18px;
+}
+.tabela-tarefas {
+    width: 100%;
+    min-width: 900px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    text-align: center;
+}
+.tabela-tarefas th, .tabela-tarefas td, .projetos-lista th, .projetos-lista td {
+    padding: 16px 32px;
+    font-size: 1.12rem;
+    text-align: center;
+}
+.card-form-tarefa, .container-form {
+    max-width: 1200px;
+    min-width: 900px;
+    width: 100%;
+}
+@media (max-width: 900px) {
+    .container-form {
+        padding: 18px 8px;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+}

@@ -1,0 +1,17 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% block title %}Quality Governance Plan | Admin{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'dashboard/admin.css' %}">
+{% endblock %}
+
+{% block branding %}
+  <div class="admin-brand">
+    <img src="{% static 'dashboard/img/logo.png' %}" alt="QGP" class="admin-logo" onerror="this.style.display='none'">
+    <h1 id="site-name"><a href="{% url 'admin:index' %}">Quality Governance Plan</a></h1>
+  </div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

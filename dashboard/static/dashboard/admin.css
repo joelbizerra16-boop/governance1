@@ -1,0 +1,37 @@
+:root{
+  --bg:#0b1220; --card:#0f172a; --text:#e5e7eb; --muted:#94a3b8; --border:#334155; --primary:#2563eb; --primary-700:#1d4ed8;
+}
+
+/**************** General ****************/ 
+body, html { background: var(--bg); }
+#header, .breadcrumbs { background: #0c1424; border-bottom: 1px solid var(--border); }
+#header a, #header #branding h1, #branding h1 a { color: var(--text) !important; }
+#user-tools, .breadcrumbs a, .breadcrumbs { color: var(--muted) !important; }
+
+/**************** Branding ****************/ 
+.admin-brand { display:flex; align-items:center; gap:12px; }
+.admin-logo { height:28px; width:auto; object-fit:contain; filter:contrast(1.05); }
+#branding h1, #branding h1 a { font-weight:800; letter-spacing:.03em; color:var(--text) !important; }
+
+/**************** Content ****************/ 
+#content { background: var(--bg); }
+.dashboard #content, .module, .app-auth .module, .module caption, .inline-group .tabular table { background: var(--card) !important; color: var(--text); border: 1px solid var(--border); }
+.module h2, .module caption, .grp-module h2 { color: var(--text); }
+.module caption { background: transparent; border-bottom: 1px solid var(--border); }
+.table thead th, .module table thead th { background: #101a2e; border-color: var(--border); color: var(--text); }
+.row1, .row2, .module tbody tr:nth-child(even) { background: #0e1729; }
+
+/**************** Forms ****************/ 
+input, select, textarea { background:#0b1220; color:var(--text); border:1px solid var(--border); border-radius:8px; }
+input:focus, select:focus, textarea:focus { outline:none; border-color: var(--primary); }
+
+/**************** Buttons ****************/ 
+.button, input[type=submit], .submit-row input, .deletelink, .grp-button { background: var(--primary); border:none; color:#fff; border-radius:8px; }
+.button:hover, input[type=submit]:hover, .submit-row input:hover { background: var(--primary-700); }
+.deletelink { background:#b91c1c; }
+.deletelink:hover { background:#991b1b; }
+
+/**************** Login ****************/ 
+.login #container { border:1px solid var(--border); background: var(--card); color:var(--text); }
+.login #header { background:#0c1424; }
+.login #header h1 a { color: var(--text); }

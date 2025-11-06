@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Quality Governance Plan{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'dashboard/style.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/theme.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/dark.css' %}">
+</head>
+<body class="dark">
+    <div class="sidebar">
+        <span class="project-title">QUALITY GOVERNANCE PLAN</span>
+        <nav class="side-menu">
+            <ul>
+                <li><a href="/">Dashboard</a></li>
+                <!-- Ordem solicitada: Agenda; Auditorias; Projetos; Tarefas -->
+                <li class="dropdown">
+                    <button type="button">Agenda</button>
+                    <ul class="submenu">
+                        <li><a href="/reunioes/">Ver Agenda</a></li>
+                        <li><a href="/reunioes/criar/">Criar Reunião</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <button type="button">Auditorias</button>
+                    <ul class="submenu">
+                        <li><a href="/auditorias/">Lista de Auditorias</a></li>
+                        <li><a href="/auditorias/criar/">Criar Auditoria</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <button type="button">Projetos</button>
+                    <ul class="submenu">
+                        <li><a href="/projetos/">Lista de Projetos</a></li>
+                        <li><a href="/projetos/criar/">Criar Projeto</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <button type="button">Tarefas</button>
+                    <ul class="submenu">
+                        <li><a href="/tarefas/">Lista de Tarefas</a></li>
+                        <li><a href="/tarefas/criar/">Criar Tarefa</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div class="sidebar-user" aria-label="Usuário logado">
+            <div class="avatar" aria-hidden="true">
+                {{ request.user.username|first|upper }}
+            </div>
+            <div class="user-meta">
+                <div class="name">{{ request.user.get_full_name|default:request.user.username }}</div>
+                <div class="actions">
+                    <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="logout" style="background:none;border:none;padding:0;color:inherit;cursor:pointer;">Sair</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar-actions">
+            <button id="theme-toggle" class="theme-toggle" title="Alternar tema" aria-label="Alternar tema">☀️</button>
+        </div>
+    </div>
+    <main class="main-content" style="margin-left:220px;">
+        {% block content %}{% endblock %}
+    </main>
+            <script>
+            // Tema: lembrar preferência e alternar entre dark (padrão) e light
+            (function(){
+                const saved = localStorage.getItem('theme');
+                if(saved === 'light') { document.body.classList.add('light'); }
+                const btn = document.getElementById('theme-toggle');
+                function updateIcon(){
+                    const light = document.body.classList.contains('light');
+                    if(btn){ btn.textContent = light ? '🌙' : '☀️'; btn.setAttribute('aria-label', light ? 'Usar tema escuro' : 'Usar tema claro'); }
+                }
+                updateIcon();
+                if(btn){
+                    btn.addEventListener('click', function(){
+                        document.body.classList.toggle('light');
+                        localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+                        updateIcon();
+                    });
+                }
+            })();
+            // Sidebar dropdown: só abre ao clicar, fecha ao clicar fora ou Esc
+            (function(){
+                const dropdowns = document.querySelectorAll('.side-menu .dropdown');
+                function closeAll(except){
+                    dropdowns.forEach(d => { if(!except || d !== except) d.classList.remove('open'); });
+                }
+                dropdowns.forEach(dd => {
+                    const btn = dd.querySelector('button');
+                    if(btn){
+                        btn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const wasOpen = dd.classList.contains('open');
+                            closeAll();
+                            if(!wasOpen) dd.classList.add('open');
+                        });
+                    }
+                });
+                document.addEventListener('click', (e) => {
+                    if(!e.target.closest('.side-menu')) closeAll();
+                });
+                document.addEventListener('keydown', (e) => {
+                    if(e.key === 'Escape') closeAll();
+                });
+            })();
+            </script>
+</body>
+</html>

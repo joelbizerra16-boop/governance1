@@ -1,0 +1,20 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Excluir Projeto{% endblock %}
+
+{% block content %}
+    <h2 class="titulo-form">Excluir Projeto</h2>
+    <div class="projeto-detalhes-grid">
+        <div class="projeto-coluna">
+            <p><strong>Nome:</strong> {{ projeto.nome }}</p>
+            <p><strong>Responsável:</strong> {{ projeto.responsavel }}</p>
+            <p><strong>Unidade:</strong> {{ projeto.unidade }}</p>
+        </div>
+    </div>
+    <form method="post" class="form-buttons">
+        {% csrf_token %}
+        <p class="muted">Tem certeza que deseja excluir este projeto?</p>
+        <button type="submit" class="btn-acao">Excluir</button>
+        <a href="/projetos/" class="btn-voltar">Cancelar</a>
+    </form>
+{% endblock %}

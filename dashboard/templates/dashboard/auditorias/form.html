@@ -1,0 +1,38 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+<div class="container-form corporativo-form">
+    <h2 class="titulo-form">{% if auditoria %}Editar Auditoria{% else %}Nova Auditoria{% endif %}</h2>
+    {% if erro_data %}
+    <div class="alerts" style="margin: 0 auto 12px auto; max-width: 680px; background:#1e293b; color:#fecaca; border:1px solid #7f1d1d; padding:10px 12px; border-radius:8px;">{{ erro_data }}</div>
+    {% endif %}
+    <form method="post" class="formulario-profissional" style="margin:0 auto;">
+        {% csrf_token %}
+        <div class="form-coluna-vertical">
+            <div class="form-group">
+                <label for="tipo_auditoria">Auditoria</label>
+                <input type="text" id="tipo_auditoria" name="tipo_auditoria" class="input-auditoria-larga" value="{% if auditoria %}{{ auditoria.tipo_auditoria }}{% else %}{{ form.tipo_auditoria.value|default_if_none:'' }}{% endif %}" required>
+            </div>
+            <div class="form-group">
+                <label for="data">Data</label>
+                <input type="date" id="data" name="data" value="{% if auditoria and auditoria.data %}{{ auditoria.data|date:'Y-m-d' }}{% else %}{{ form.data.value|default_if_none:'' }}{% endif %}" required>
+            </div>
+            <div class="form-group">
+                <label for="hora">Hora</label>
+                <input type="time" id="hora" name="hora" value="{% if auditoria and auditoria.hora %}{{ auditoria.hora|time:'H:i' }}{% else %}{{ form.hora.value|default_if_none:'' }}{% endif %}" required>
+            </div>
+            <div class="form-group">
+                <label for="unidade">Unidade</label>
+                <select id="unidade" name="unidade" class="form-control" required>
+                    <option value="Todos" {% if auditoria and auditoria.unidade == 'Todos' %}selected{% elif form.unidade.value == 'Todos' %}selected{% endif %}>Todos</option>
+                    <option value="Santo André" {% if auditoria and auditoria.unidade == 'Santo André' %}selected{% elif form.unidade.value == 'Santo André' %}selected{% endif %}>Santo André</option>
+                    <option value="Gravataí" {% if auditoria and auditoria.unidade == 'Gravataí' %}selected{% elif form.unidade.value == 'Gravataí' %}selected{% endif %}>Gravataí</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-buttons">
+            <button type="submit" class="btn-salvar">Salvar</button>
+            <a href="{% url 'dashboard:lista_auditorias' %}" class="btn-voltar">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

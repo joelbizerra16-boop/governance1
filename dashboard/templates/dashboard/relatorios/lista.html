@@ -1,0 +1,20 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+<h2>Relatórios de Projetos e Tarefas</h2>
+<div class="relatorio-lista">
+    {% for relatorio in relatorios %}
+        <div class="relatorio-card">
+            <h3>{{ relatorio.projeto.nome }}</h3>
+            <ul>
+                {% for tarefa in relatorio.tarefas %}
+                    <li>{{ tarefa.nome }}{% if tarefa.responsavel %} - <strong>{{ tarefa.responsavel }}</strong>{% endif %}</li>
+                {% empty %}
+                    <li><em>Sem tarefas associadas</em></li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% empty %}
+        <p>Nenhum projeto cadastrado.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+<div class="projetos-container">
+    <div style="display:flex; justify-content:center; align-items:center; gap:12px; margin-bottom: 4px;">
+        <h2 class="projetos-titulo" style="margin: 0;">Auditorias</h2>
+    </div>
+    <div style="text-align: right; margin: 6px 0 12px 0; display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
+        <a href="{% url 'dashboard:criar_auditoria' %}"
+           class="btn-ordenar"
+           style="display:inline-block; padding:7px 16px; background:#22c55e; color:#fff; border-radius:7px; font-weight:500; text-decoration:none;">
+            + Nova Auditoria
+        </a>
+        <a href="{% url 'dashboard:auditorias_pdf' %}"
+           class="btn-ordenar"
+           style="display:inline-block; padding:7px 16px; background:#2563eb; color:#fff; border-radius:7px; font-weight:500; text-decoration:none;">
+            Exportar PDF
+        </a>
+        <a href="?{% if request.GET.ano %}ano={{ request.GET.ano }}&{% endif %}{% if request.GET.unidade %}unidade={{ request.GET.unidade }}&{% endif %}order_falta=asc"
+           class="btn-ordenar"
+           style="display:inline-block; padding:7px 16px; background:#facc15; color:#111827; border-radius:7px; font-weight:500; text-decoration:none; margin-left:8px;">
+            Ordenar A/Z
+        </a>
+    </div>
+    <form method="get" style="margin-bottom: 18px; display: flex; gap: 12px; align-items: center;">
+        <select name="ano" style="padding:6px 12px; border-radius:7px; background:#181f2a; color:#e5e7eb; border:1px solid #334155; font-size:1em;" onchange="this.form.submit()">
+            <option value="">Todos os anos</option>
+            {% for ano in anos %}
+                <option value="{{ ano }}" {% if request.GET.ano == ano|stringformat:'s' %}selected{% endif %}>{{ ano }}</option>
+            {% endfor %}
+        </select>
+        <select name="unidade" style="padding:6px 12px; border-radius:7px; background:#181f2a; color:#e5e7eb; border:1px solid #334155; font-size:1em;" onchange="this.form.submit()">
+            <option value="">Todos</option>
+            <option value="Santo André" {% if request.GET.unidade == 'Santo André' %}selected{% endif %}>Santo André</option>
+            <option value="Gravataí" {% if request.GET.unidade == 'Gravataí' %}selected{% endif %}>Gravataí</option>
+        </select>
+    </form>
+    <!-- CSRF para AJAX: lido pelo JS abaixo -->
+    <form id="csrf-form" style="display:none;">{% csrf_token %}</form>
+    <style>
+        .status-pill { padding:6px 14px; border-radius:9999px; border:none; font-weight:600; cursor:pointer; transition:transform .05s ease, filter .2s ease; box-shadow: 0 0 0 1px rgba(148,163,184,.18) inset; }
+        .status-pill:hover { filter: brightness(1.05); }
+        .status-pill:active { transform: translateY(1px); }
+        .status-aguardando { background:#facc15; color:#111827; }
+        .status-confirmado { background:#2563eb; color:#fff; }
+    </style>
+    <table class="projetos-lista" style="width:100%; text-align:center;">
+        <thead>
+            <tr>
+                <th>Tipo de auditoria</th>
+                <th>Data</th>
+                <th>Unidade</th>
+                <th>Falta</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for auditoria in auditorias %}
+            <tr>
+                <td>{{ auditoria.tipo_auditoria }}</td>
+                <td>{{ auditoria.data|date:'d/m/Y' }} {% if auditoria.hora %}{{ auditoria.hora|time:'H:i' }}{% endif %}</td>
+                <td>{{ auditoria.unidade }}</td>
+                <td>{% if auditoria.dias_falta is not None %}{% if auditoria.dias_falta <= 0 %}Realizada{% else %}{{ auditoria.dias_falta }}{% endif %}{% else %}-{% endif %}</td>
+                <td>
+                    <button
+                        type="button"
+                        class="btn-status status-pill {% if auditoria.status == 'Agendada' %}status-confirmado{% else %}status-aguardando{% endif %}"
+                        data-id="{{ auditoria.id }}"
+                        data-url="{% url 'dashboard:toggle_auditoria_status' auditoria.id %}"
+                        aria-label="Alternar status da auditoria"
+                    >
+                        {% if auditoria.status == 'Agendada' %}Confirmado{% else %}Aguardando{% endif %}
+                    </button>
+                </td>
+                <td style="display:flex; gap:8px; justify-content:center;">
+                    <a href="{% url 'dashboard:editar_auditoria' auditoria.id %}" class="btn-acao btn-icon" aria-label="Editar" style="padding:4px 8px;">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" width="20" height="20" style="vertical-align:middle;fill:#2563eb;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm18.71-11.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.99-1.66z"/></svg>
+                    </a>
+                    <a href="{% url 'dashboard:excluir_auditoria' auditoria.id %}" class="btn-acao btn-icon" aria-label="Excluir" style="padding:4px 8px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="vertical-align:middle;"><path d="M6 19c0 1.104.896 2 2 2h8c1.104 0 2-.896 2-2V7H6v12zm13-15h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="#e11d48"/></svg>
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6">Nenhuma auditoria cadastrada.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% block scripts %}
+    <script>
+    function getCookie(name) {
+        const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+        if (match) return decodeURIComponent(match[2]);
+        return null;
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.btn-status').forEach(function(btn) {
+            btn.addEventListener('click', async function() {
+                const url = btn.getAttribute('data-url');
+                const csrfToken = getCookie('csrftoken');
+                btn.disabled = true;
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrfToken,
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        credentials: 'same-origin',
+                        body: '{}'
+                    });
+                    if (response.status === 401) {
+                        alert('Você precisa estar logado para alterar o status.');
+                        btn.disabled = false;
+                        return;
+                    }
+                    if (!response.ok) {
+                        alert('Erro ao salvar no banco.');
+                        btn.disabled = false;
+                        return;
+                    }
+                    const data = await response.json();
+                    if (data.status) {
+                        btn.textContent = data.status;
+                        btn.classList.remove('status-confirmado', 'status-aguardando');
+                        if (data.status === 'Confirmado') btn.classList.add('status-confirmado');
+                        else btn.classList.add('status-aguardando');
+                    }
+                } catch (e) {
+                    alert('Erro de comunicação com o servidor.');
+                } finally {
+                    btn.disabled = false;
+                }
+            });
+        });
+    });
+    </script>
+    {% endblock %}
+</div>
+{% endblock %}

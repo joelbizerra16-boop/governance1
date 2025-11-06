@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Auditorias</title>
+    <style>
+        @page { size: A4 landscape; margin: 18mm 18mm; }
+        body { font-family: Arial, sans-serif; color: #111; font-size: 12pt; }
+        .wrap { width: 100%; }
+        .title { text-align: center; font-size: 20pt; margin: 0 0 14pt 0; font-weight: bold; }
+        .subtitle { text-align: center; color: #555; font-size: 11pt; margin: -6pt 0 16pt 0; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #2563eb; padding: 8pt 9pt; }
+        th { background: #2563eb; color: #fff; font-weight: 700; font-size: 11pt; }
+        tr:nth-child(even) td { background: #f3f6fa; }
+        .right { text-align: right; }
+        .center { text-align: center; }
+    </style>
+    <!-- Observação: Template independente, sem herdar base.html para evitar menus/links -->
+    <!-- Mantém apenas título e tabela, com estilo limpo e profissional -->
+    <!-- Compatível com xhtml2pdf (sem flex/grid) -->
+    
+</head>
+<body>
+    <div class="wrap">
+        <div class="title">Auditorias</div>
+        <div class="subtitle">Relatório consolidado</div>
+        <table>
+            <thead>
+                <tr>
+                    <th class="left">Tipo de auditoria</th>
+                    <th class="center" style="width: 22%">Data</th>
+                    <th class="center" style="width: 18%">Unidade</th>
+                    <th class="center" style="width: 12%">Falta</th>
+                    <th class="center" style="width: 16%">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for auditoria in auditorias %}
+                <tr>
+                    <td>{{ auditoria.tipo_auditoria|default:"-" }}</td>
+                    <td class="center">{% if auditoria.data %}{{ auditoria.data|date:'d/m/Y' }}{% else %}-{% endif %} {% if auditoria.hora %}{{ auditoria.hora|time:'H:i' }}{% endif %}</td>
+                    <td class="center">{{ auditoria.unidade|default:"-" }}</td>
+                    <td class="center">{% if auditoria.dias_falta is not None %}{% if auditoria.dias_falta <= 0 %}Realizada{% else %}{{ auditoria.dias_falta }}{% endif %}{% else %}-{% endif %}</td>
+                    <td class="center">{{ auditoria.status|default:"-" }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5" class="center">Nenhuma auditoria cadastrada.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

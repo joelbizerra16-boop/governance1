@@ -1,0 +1,10 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+<div class="projetos-container">
+        <h2 class="projetos-titulo" style="text-align:center; margin-top:40px;">Auditoria não encontrada</h2>
+        <p style="text-align:center;">O item de auditoria com ID <strong>{{ auditoria_id }}</strong> não existe ou já foi excluído.</p>
+        <div style="text-align:center; margin-top:24px;">
+            <a href="{% url 'dashboard:lista_auditorias' %}" class="btn-acao">Voltar para lista de auditorias</a>
+        </div>
+</div>
+{% endblock %}

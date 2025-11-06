@@ -1,0 +1,229 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}QUALITY GOVERNANCE PLAN - Dashboard{% endblock %}
+
+{% block content %}
+<style>
+	.dash-wrap{display:flex;flex-direction:column;gap:16px}
+	.dash-filtros{display:flex;gap:12px;align-items:center;background:#0f172a;border:1px solid #1e293b;padding:12px 14px;border-radius:10px}
+	.dash-filtros select{background:#111827;color:#e5e7eb;border:1px solid #374151;border-radius:8px;padding:8px 10px}
+	.dash-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+	.dash-card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:16px 18px;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+	.dash-card h4{margin:0 0 6px 0;color:#93c5fd;font-weight:600}
+	.dash-card .value{font-size:1.8rem;font-weight:700;color:#e5e7eb}
+	.muted{color:#9ca3af}
+	.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+	.panel{background:#0b1220;border:1px solid #1e293b;border-radius:12px;padding:16px}
+	.panel h3{margin:0 0 8px 0;color:#60a5fa}
+	.chart-box{height:160px;}
+	.chart-box canvas{width:100% !important;height:100% !important;display:block}
+	table.dark{width:100%;border-collapse:collapse}
+	table.dark th, table.dark td{padding:8px 10px;border-bottom:1px dashed #243041}
+	table.dark th{color:#9cc1ff;font-weight:600;text-align:left}
+	table.dark td{color:#d1d5db}
+	.badge-red{color:#fecaca;background:#7f1d1d33;border:1px solid #7f1d1d;padding:2px 8px;border-radius:999px;font-size:.85rem}
+	.badge-green{color:#bbf7d0;background:#065f4633;border:1px solid #065f46;padding:2px 8px;border-radius:999px;font-size:.85rem}
+	@media (max-width:1100px){.dash-cards{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}}
+</style>
+
+<div class="dash-wrap">
+	<!-- Filtros -->
+	<form method="get" class="dash-filtros">
+		<div>
+			<label for="f-ano" class="muted">Ano</label><br>
+			<select id="f-ano" name="ano">
+				<option value="">Todos</option>
+				{% for a in anos %}
+					<option value="{{ a }}" {% if f_ano == a|stringformat:'s' %}selected{% endif %}>{{ a }}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div>
+			<label for="f-planta" class="muted">Planta</label><br>
+			<select id="f-planta" name="planta">
+				<option value="">Todas</option>
+				<option value="Santo André" {% if f_planta == 'Santo André' %}selected{% endif %}>Santo André</option>
+				<option value="Gravataí" {% if f_planta == 'Gravataí' %}selected{% endif %}>Gravataí</option>
+			</select>
+		</div>
+		<div>
+			<label for="f-status" class="muted">Status do Projeto</label><br>
+			<select id="f-status" name="status">
+				<option value="">Todos</option>
+				<option value="0" {% if f_status == '0' %}selected{% endif %}>0%</option>
+				<option value="25" {% if f_status == '25' %}selected{% endif %}>25%</option>
+				<option value="50" {% if f_status == '50' %}selected{% endif %}>50%</option>
+				<option value="75" {% if f_status == '75' %}selected{% endif %}>75%</option>
+				<option value="100" {% if f_status == '100' %}selected{% endif %}>100%</option>
+			</select>
+		</div>
+		<div style="align-self:end; margin-left:auto;">
+			<button type="submit" class="btn-modern">Aplicar</button>
+		</div>
+	</form>
+
+	<!-- Cards -->
+	<div class="dash-cards">
+		<div class="dash-card">
+			<h4>Projetos</h4>
+			<div class="value">{{ total_projetos }}</div>
+		</div>
+		<div class="dash-card">
+			<h4>Tarefas</h4>
+			<div class="value">{{ total_tarefas }}</div>
+		</div>
+		<div class="dash-card">
+			<h4>Conclusão Média</h4>
+			<div class="value">{{ media_conclusao }}%</div>
+		</div>
+		<div class="dash-card">
+			<h4>Projetos Atrasados</h4>
+			<div class="value">{{ projetos_atrasados }}</div>
+		</div>
+	</div>
+
+	<!-- Gráficos (placeholders prontos para integração com Chart.js) -->
+		<div class="grid-2">
+			<div class="panel">
+				<h3>Projetos por Status</h3>
+				<div class="chart-box"><canvas id="chart-projetos"></canvas></div>
+			</div>
+			<div class="panel">
+				<h3>Tarefas por Status</h3>
+				<div class="chart-box"><canvas id="chart-tarefas"></canvas></div>
+			</div>
+		</div>
+
+	<!-- Tabelas -->
+	<div class="grid-2">
+		<div class="panel">
+			<h3>Tarefas críticas (≤ 7 dias)</h3>
+			<table class="dark">
+				<thead>
+					<tr><th>Tarefa</th><th>Projeto</th><th>Fim</th><th>Status</th></tr>
+				</thead>
+				<tbody>
+				{% for t in tarefas_criticas %}
+					<tr>
+						<td>{{ t.nome }}</td>
+						<td>{{ t.projeto.nome }}</td>
+						<td>{{ t.data_fim|date:'d/m/Y' }}</td>
+						<td>{% if t.status == '100%' %}<span class="badge-green">{{ t.status }}</span>{% else %}<span class="badge-red">{{ t.status }}</span>{% endif %}</td>
+					</tr>
+				{% empty %}
+					<tr><td colspan="4" class="muted">Sem itens no período.</td></tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<div class="panel">
+			<h3>Próximas reuniões</h3>
+			<table class="dark">
+				<thead>
+					<tr><th>Título</th><th>Data</th><th>Hora</th><th>Local</th></tr>
+				</thead>
+				<tbody>
+				{% for r in proximas_reunioes %}
+					<tr>
+						<td>{{ r.titulo }}</td>
+						<td>{{ r.data|date:'d/m/Y' }}</td>
+						<td>{{ r.hora|time:'H:i' }}</td>
+						<td>{{ r.local }}</td>
+					</tr>
+				{% empty %}
+					<tr><td colspan="4" class="muted">Nenhuma reunião futura.</td></tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+				<!-- Auditorias: Planejadas x Realizadas -->
+					<div class="panel" style="margin-top:14px;">
+						<h3>Auditorias Planejadas x Realizadas ({{ f_ano|default:'Ano Corrente' }})</h3>
+						<canvas id="chart-auditorias" height="91"></canvas>
+					</div>
+
+</div>
+{% load static %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{{ projetos_chart|json_script:"chart-projetos-data" }}
+{{ tarefas_chart|json_script:"chart-tarefas-data" }}
+			{{ auditorias_chart|json_script:"chart-auditorias-data" }}
+<script>
+	(function(){
+		const darkGrid = '#1e293b';
+		const darkText = '#d1d5db';
+		const ctxP = document.getElementById('chart-projetos');
+		const ctxT = document.getElementById('chart-tarefas');
+		if(ctxP){
+			const data = JSON.parse(document.getElementById('chart-projetos-data').textContent);
+			const palette = ['#60a5fa','#22c55e','#f59e0b','#ef4444','#a78bfa','#38bdf8'];
+			const datasets = data.datasets.map((d,i)=>({
+				label: d.label,
+				data: d.data,
+				backgroundColor: palette[i%palette.length],
+				borderColor: palette[i%palette.length],
+				borderWidth: 1,
+			}));
+			new Chart(ctxP, {
+				type: 'bar',
+				data: { labels: data.labels, datasets },
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: { legend: { labels: { color: darkText } } },
+					scales: {
+						x: { grid: { color: darkGrid }, ticks: { color: darkText } },
+						y: { beginAtZero: true, grid: { color: darkGrid }, ticks: { color: darkText } },
+					}
+				}
+			});
+		}
+		if(ctxT){
+			const data = JSON.parse(document.getElementById('chart-tarefas-data').textContent);
+			const colors = ['#ef4444','#f59e0b','#eab308','#60a5fa','#22c55e','#94a3b8'];
+			new Chart(ctxT, {
+				type: 'doughnut',
+				data: { labels: data.labels, datasets: [{ data: data.data, backgroundColor: colors, borderColor: '#0f172a' }]},
+				options: { maintainAspectRatio: false, plugins: { legend: { labels: { color: '#d1d5db' } } } }
+			});
+		}
+
+
+
+					const ctxA = document.getElementById('chart-auditorias');
+					if(ctxA){
+						const data = JSON.parse(document.getElementById('chart-auditorias-data').textContent);
+						const cols = ['#eab308','#22c55e'];
+						const datasets = data.datasets.map((d,i)=>({
+							label: d.label,
+							data: d.data,
+							backgroundColor: cols[i%cols.length],
+							borderColor: cols[i%cols.length],
+							borderWidth: 1,
+						}));
+						new Chart(ctxA, {
+							type: 'bar',
+							data: { labels: data.labels, datasets },
+							options: {
+								responsive: true,
+								plugins: { legend: { labels: { color: darkText } } },
+								scales: {
+									x: { grid: { color: darkGrid }, ticks: { color: darkText } },
+									y: { beginAtZero: true, grid: { color: darkGrid }, ticks: { color: darkText } },
+								}
+							}
+						});
+					}
+
+			// Auto-submit filtros ao mudar
+			const form = document.querySelector('.dash-filtros');
+			if(form){
+				form.querySelectorAll('select').forEach(sel=>{
+					sel.addEventListener('change', ()=> form.submit());
+				});
+			}
+	})();
+</script>
+{% endblock %}

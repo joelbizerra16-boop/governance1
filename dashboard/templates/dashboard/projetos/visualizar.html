@@ -1,0 +1,76 @@
+{% extends 'dashboard/base.html' %}
+{% load custom_filters %}
+
+{% block title %}Visualizar Projeto{% endblock %}
+
+{% block content %}
+    <div style="margin-bottom:18px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; gap:12px;">
+            <a href="/projetos/{{ projeto.id }}/editar/" class="btn-acao">Editar</a>
+            <a href="/projetos/{{ projeto.id }}/excluir/" class="btn-acao">Excluir</a>
+            <a href="/projetos/" class="btn-voltar">Voltar</a>
+        </div>
+        <a href="/projetos/{{ projeto.id }}/pdf/" title="Gerar PDF" style="margin-left:auto; display:inline-block; background:#181f2a; border-radius:8px; padding:7px 10px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#2563eb" viewBox="0 0 24 24"><path d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.828A2 2 0 0 0 19.414 7.414l-5.828-5.828A2 2 0 0 0 12.172 1H6zm0 2h6v5a1 1 0 0 0 1 1h5v11H6V4zm8 1.414L18.586 10H14V5.414z"/></svg>
+        </a>
+    </div>
+    <h2 class="titulo-form">Visualizar Projeto</h2>
+    <div class="projeto-detalhes-grid">
+    <div class="projeto-coluna">
+            <p><strong>ID do Projeto:</strong> {{ projeto.id }}</p>
+            <p><strong>Nome:</strong> {{ projeto.nome }}</p>
+            <p><strong>Responsável:</strong> {{ projeto.responsavel }}</p>
+            <p><strong>Área responsável:</strong> {{ projeto.area_responsavel }}</p>
+            <p><strong>Data início:</strong> {{ projeto.data_inicio }}</p>
+            <p><strong>Data fim:</strong> {{ projeto.data_fim }}</p>
+            <p><strong>Observação:</strong> <span style="white-space:pre-line;">{{ projeto.observacao|default:'-' }}</span></p>
+            <p><strong>Data de Criação:</strong> {{ projeto.data_criacao|date:'d \\d\\e F \\d\\e Y H:i' }}</p>
+        </div>
+        <div class="projeto-coluna">
+            <p><strong>Unidade:</strong> {{ projeto.unidade }}</p>
+            <p><strong>Status (%):</strong> <span class="status-badge {{ status_percent|status_badge_class }}">{{ status_percent }}%</span></p>
+                <!-- Usuário, Criado por removidos -->
+            <p><strong>Tarefas associadas:</strong></p>
+            <ul>
+            {% for tarefa in projeto.tarefas_associadas.all %}
+                <li>
+                    <a href="/tarefas/{{ tarefa.id }}/">{{ tarefa.nome }}</a> {% if tarefa.concluida %}(Concluída){% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+                <!-- Ver todas as tarefas button removido -->
+        </div>
+    </div>
+
+    <section style="margin-top:32px;">
+        <h3 style="text-align:left;">Tarefas Relacionadas ao Projeto</h3>
+        <table class="projetos-lista" style="margin-top:12px;min-width:600px;text-align:left;margin-left:0;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Responsável</th>
+                    <th>Data Início</th>
+                    <th>Data Fim</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for tarefa in tarefas_relacionadas %}
+                <tr>
+                    <td>{{ tarefa.id }}</td>
+                    <td><a href="/tarefas/{{ tarefa.id }}/">{{ tarefa.nome }}</a></td>
+                    <td>{{ tarefa.responsavel }}</td>
+                    <td>{{ tarefa.data_inicio|date:'d/m/Y' }}</td>
+                    <td>{{ tarefa.data_fim|date:'d/m/Y' }}</td>
+                    <td>
+                        <span class="status-badge {{ tarefa.status|status_badge_class }}">{{ tarefa.status }}</span>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="6" class="muted">Nenhuma tarefa relacionada a este projeto.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+{% endblock %}

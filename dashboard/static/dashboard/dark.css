@@ -1,0 +1,265 @@
+.form-row {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 0;
+}
+.form-col {
+  flex: 1 1 0;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.form-col[style*="100%"] {
+  flex-basis: 100%;
+  max-width: 100%;
+}
+.form-group {
+  margin-bottom: 18px;
+}
+@media (max-width: 900px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  .form-col {
+    min-width: 100%;
+  }
+}
+.form-row {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 0;
+}
+.form-col {
+  flex: 1 1 0;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.form-group {
+  margin-bottom: 18px;
+}
+@media (max-width: 900px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  .form-col {
+    min-width: 100%;
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.form-col {
+  flex: 1 1 300px;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.form-group {
+  margin-bottom: 16px;
+}
+.form-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+@media (max-width: 800px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  .form-col {
+    min-width: 100%;
+  }
+}
+/* Dark theme overrides (loaded after theme.css) */
+
+/* Make dark the default by overriding variables globally */
+:root {
+  --surface-50:  #0b1220;   /* app background */
+  --surface-0:   #0f172a;   /* cards, tables */
+  --surface-100: #111827;   /* headers */
+  --border-200:  #1f2937;   /* borders */
+  --text-900:    #e5e7eb;   /* primary text */
+  --text-700:    #cbd5e1;   /* secondary text */
+  --muted-400:   #94a3b8;   /* placeholders */
+}
+
+/* Menu superior horizontal - dark */
+.topnav {
+  background: #0b1220;
+}
+.topnav a, .topnav button {
+  color: #e5e7eb;
+}
+.topnav a:hover, .topnav button:hover,
+.topnav .dropdown.open > button,
+.topnav .dropdown.open > a {
+  background: #111827;
+}
+.topnav .menu {
+  background: #111827;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.24);
+}
+.topnav .menu a {
+  color: #e5e7eb;
+}
+.topnav .menu a:hover {
+  background: #1f2937;
+}
+.topbar {
+  background: #0b1220;
+  color: #e5e7eb;
+}
+.topbar .project-title {
+  color: #e5e7eb;
+}
+.theme-toggle {
+  color: #e5e7eb;
+  border-color: #334155;
+}
+
+/* Global */
+body { background: var(--surface-50) !important; color: var(--text-900) !important; }
+.project-title { color: var(--text-900) !important; }
+
+/* Sidebar */
+.sidebar { background: #0b1220 !important; }
+.sidebar a { color: #e2e8f0 !important; background: transparent !important; }
+.sidebar nav ul li:hover { background: #111827 !important; }
+
+/* Topbar (mobile) */
+.topbar { background: #0b1220 !important; color: #fff !important; }
+.menu-toggle { color: #fff !important; }
+
+/* Headings */
+h1, h2, h3, .projetos-titulo, .titulo-form, .titulo-lista {
+  color: #e5e7eb !important;
+}
+
+/* Cards/containers */
+.projetos-container, .card, .card-form-tarefa, .container-form {
+  background: var(--surface-0) !important; border: 1px solid var(--border-200) !important; color: var(--text-900) !important;
+}
+
+/* Tables */
+.projetos-lista, .tabela-tarefas, .tabela-reunioes { background: var(--surface-0) !important; }
+.projetos-lista thead th,
+.tabela-tarefas thead th,
+.tabela-reunioes thead th {
+  background: var(--surface-100) !important; color: var(--text-900) !important; border-bottom: 1px solid var(--border-200) !important;
+}
+.projetos-lista tbody tr:nth-child(even),
+.tabela-tarefas tbody tr:nth-child(even),
+.tabela-reunioes tbody tr:nth-child(even) { background: color-mix(in srgb, #000 10%, var(--surface-0)) !important; }
+.projetos-lista td, .tabela-tarefas td, .tabela-reunioes td { color: var(--text-900) !important; }
+
+/* Buttons */
+/* Primary */
+.btn-criar-projeto,
+.btn-filtrar,
+.btn-salvar,
+.shortcuts button,
+button.btn-shortcut { background: #0f4c81 !important; color: #fff !important; border-color: #0f4c81 !important; }
+.btn-criar-projeto:hover,
+.btn-filtrar:hover,
+.btn-salvar:hover,
+.shortcuts button:hover,
+button.btn-shortcut:hover { background: #1f7ab5 !important; border-color: #1f7ab5 !important; }
+
+/* Secondary/neutral */
+.btn-acao, .btn-cancelar, .btn-voltar {
+  background: #1f2937 !important; color: #e5e7eb !important; border: 1px solid #334155 !important;
+}
+.btn-acao:hover, .btn-cancelar:hover, .btn-voltar:hover {
+  background: #334155 !important; border-color: #475569 !important;
+}
+
+/* Icon-only buttons */
+.btn-icon { background: #1f2937 !important; border: 1px solid #334155 !important; color: #e2e8f0 !important; width: 28px; height: 28px; border-radius: 6px; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
+.btn-icon svg { width: 18px; height: 18px; fill: currentColor; }
+.btn-icon:hover { background: #2b3445 !important; }
+.btn-icon.danger { background: #3f1d1d !important; color: #fecaca !important; border-color: #7f1d1d !important; }
+.btn-icon.danger:hover { background: #7f1d1d !important; color: #fff !important; border-color: #7f1d1d !important; }
+
+/* Status pills */
+.btn-status.aguardando { background: #1f2937 !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; }
+.btn-status.confirmado { background: #22c55e !important; color: #fff !important; border: 1px solid #16a34a !important; box-shadow: 0 0 0 2px rgba(34,197,94,0.18) !important; }
+
+/* Trophy in Falta */
+.status-realizada { background: transparent !important; padding: 0; border-radius: 0; }
+.status-realizada svg { fill: #22c55e !important; }
+
+/* Forms */
+input, select, textarea {
+  background: #0b1220 !important; color: #e5e7eb !important; border: 1px solid #1f2937 !important;
+}
+input::placeholder, textarea::placeholder { color: #94a3b8 !important; }
+
+/* Combobox específicas do formulário corporativo (Planta/Recorrência) */
+.corporativo-form select.dark-select {
+  background: #0b1220 !important;
+  color: var(--text-900) !important;
+  border: 1px solid #1f2937 !important;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Force dark surfaces inside create/edit project grid */
+.form-projeto-grid { background: var(--surface-0) !important; border: 1px solid var(--border-200) !important; }
+.form-projeto-grid input,
+.form-projeto-grid select,
+.form-projeto-grid textarea {
+  background: #0b1220 !important;
+  color: var(--text-900) !important;
+  border: 1px solid #1f2937 !important;
+  box-shadow: none !important;
+}
+.form-projeto-grid input::placeholder,
+.form-projeto-grid textarea::placeholder { color: var(--muted-400) !important; }
+
+/* Observation textarea below the grid */
+.form-buttons + .form-group textarea,
+.form-group textarea { background: #0b1220 !important; color: var(--text-900) !important; border: 1px solid #1f2937 !important; }
+
+/* Links */
+a { color: #93c5fd; }
+a:hover { color: #bfdbfe; }
+
+/* Light mode overrides (when user toggles) */
+body.light {
+  --surface-50:  #f5f7fa;
+  --surface-0:   #ffffff;
+  --surface-100: #f3f4f6;
+  --border-200:  #e5e7eb;
+  --text-900:    #0f172a;
+  --text-700:    #334155;
+}
+body.light .sidebar { background: #0c3a63 !important; }
+body.light .sidebar nav ul li:hover { background: #0f4c81 !important; }
+body.light .topbar { background: #0c3a63 !important; color: #fff !important; }
+body.light .projetos-lista, body.light .tabela-tarefas, body.light .tabela-reunioes { background: #fff !important; }
+body.light .projetos-lista thead th, body.light .tabela-tarefas thead th, body.light .tabela-reunioes thead th {
+  background: color-mix(in srgb, var(--primary-600) 12%, #ffffff) !important;
+  color: var(--primary-600) !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+body.light .projetos-lista tbody tr:nth-child(even), body.light .tabela-tarefas tbody tr:nth-child(even), body.light .tabela-reunioes tbody tr:nth-child(even) { background: #f8fafc !important; }
+body.light .btn-acao, body.light .btn-cancelar, body.light .btn-voltar { background: color-mix(in srgb, var(--primary-600) 10%, #eaf2fb) !important; color: var(--primary-600) !important; border: 1px solid #c7dcf3 !important; }
+body.light .btn-acao:hover, body.light .btn-cancelar:hover, body.light .btn-voltar:hover { background: var(--primary-600) !important; color: #fff !important; }
+body.light .btn-icon { background: #f1f5f9 !important; border: 1px solid #e2e8f0 !important; color: var(--primary-600) !important; }
+body.light .btn-icon:hover { background: #e2e8f0 !important; }
+body.light .btn-status.aguardando { background: #e2e8f0 !important; color: #334155 !important; border: 1px solid #cbd5e1 !important; }
+body.light .btn-status.confirmado { background: #0c3a63 !important; color: #fff !important; border: 1px solid #0c3a63 !important; box-shadow: 0 0 0 2px #0c3a63 !important; }
+body.light input, body.light select, body.light textarea { background: #f8fafc !important; color: #0f172a !important; border: 1px solid #e5e7eb !important; }
+body.light input::placeholder, body.light textarea::placeholder { color: #64748b !important; }

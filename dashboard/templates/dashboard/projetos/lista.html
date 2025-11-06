@@ -1,0 +1,84 @@
+{% extends 'dashboard/base.html' %}
+{% load custom_filters %}
+{% block title %}Projetos / Planos de Ação{% endblock %}
+{% block content %}
+<div class="projetos-container">
+    <h2 class="projetos-titulo">Projetos</h2>
+    <form method="get" class="filtros filtros-row">
+        <div class="filtros-col">
+            <div class="filtro-item">
+                <label for="unidade">Unidade:</label>
+                <select name="unidade" id="unidade">
+                    <option value="">Todas</option>
+                    {% for unidade in unidades %}
+                        <option value="{{ unidade.0 }}" {% if unidade_selecionada == unidade.0 %}selected{% endif %}>{{ unidade.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="filtros-col">
+            <div class="filtro-item">
+                <label for="area">Área Responsável:</label>
+                <select name="area" id="area">
+                    <option value="">Todas</option>
+                    {% for area in areas %}
+                        <option value="{{ area.0 }}" {% if area_selecionada == area.0 %}selected{% endif %}>{{ area.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="filtros-col">
+            <div class="filtro-item">
+                <label for="busca">Buscar:</label>
+                <input type="text" name="busca" id="busca" value="{{ busca }}" placeholder="Nome do projeto...">
+            </div>
+        </div>
+        <div class="filtros-botoes">
+            <button type="submit" class="btn-filtrar">Filtrar</button>
+            <a href="{% url 'dashboard:criar_projeto' %}" class="btn-criar-projeto">+ Novo Projeto</a>
+        </div>
+    </form>
+    <div class="tabela-wrapper">
+        <table class="projetos-lista">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Unidade</th>
+                    <th>Área</th>
+                    <th>Status</th>
+                    <th>Início</th>
+                    <th>Fim</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for projeto in projetos %}
+                <tr>
+                    <td>{{ projeto.nome }}</td>
+                    <td>{{ projeto.get_unidade_display }}</td>
+                    <td>{{ projeto.get_area_responsavel_display }}</td>
+                    <td>
+                        <span class="status-badge {{ projetos_status|get_item:projeto.id|status_badge_class }}">{{ projetos_status|get_item:projeto.id }}%</span>
+                    </td>
+                    <td>{{ projeto.data_inicio|date:'d/m/Y' }}</td>
+                    <td>{{ projeto.data_fim|date:'d/m/Y' }}</td>
+                    <td>
+                        <a href="{% url 'dashboard:visualizar_projeto' projeto.id %}" class="btn-acao" title="Ver Projeto" aria-label="Ver Projeto" style="padding:4px 8px;display:inline-flex;align-items:center;margin-right:6px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path fill="#2563eb" d="M12 5C5 5 2 12 2 12s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 .002 6.002A3 3 0 0 0 12 9z"/></svg>
+                        </a>
+                        <a href="{% url 'dashboard:editar_projeto' projeto.id %}" class="btn-acao" title="Editar Projeto" aria-label="Editar Projeto" style="padding:4px 8px;display:inline-flex;align-items:center;margin-right:6px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path fill="#f59e0b" d="M20.71 4.63 19.37 3.29a1 1 0 0 0-1.41 0l-7.1 7.1a1 1 0 0 0-.26.46l-.97 3.4a1 1 0 0 0 1.23 1.23l3.4-.97a1 1 0 0 0 .46-.26l7.1-7.1a1 1 0 0 0 0-1.41zM12.59 13 11 14.59l-1.64.47.47-1.64L11.41 12 12.59 13zM4 20h16v2H3a1 1 0 0 1-1-1v-3h2v2z"/></svg>
+                        </a>
+                        <a href="{% url 'dashboard:excluir_projeto' projeto.id %}" class="btn-acao" title="Excluir Projeto" aria-label="Excluir Projeto" onclick="return confirm('Tem certeza que deseja excluir este projeto?');" style="padding:4px 8px;display:inline-flex;align-items:center;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path fill="#e53935" d="M9 3h6a1 1 0 0 1 1 1v1h5v2H3V5h5V4a1 1 0 0 1 1-1zm1 5h2v11h-2V8zm4 0h2v11h-2V8zM7 8h2v11H7V8z"/></svg>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="7" style="text-align:center;color:#888;">Nenhum projeto encontrado.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

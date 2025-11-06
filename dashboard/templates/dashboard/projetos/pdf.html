@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Projeto {{ projeto.nome }}</title>
+    <style>
+        @page { size: A4 landscape; margin: 18mm 18mm; }
+    body { font-family: Arial, sans-serif; background: #fff; color: #222; font-size: 1.25em; }
+    .pdf-container { max-width: 1000px; margin: 0 auto; padding: 40px; }
+    h1 { text-align: center; font-size: 2.7em; margin-bottom: 22px; }
+    /* Layout em duas colunas compatível com xhtml2pdf */
+    .two-col { width: 100%; border-collapse: separate; border-spacing: 24px 0; margin-bottom: 24px; }
+    .two-col td { vertical-align: top; width: 50%; }
+    .two-col .box-title { font-weight: 700; color: #2563eb; margin: 0 0 8px 0; font-size: 1.2em; }
+    .two-col p { margin: 8px 0; font-size: 1.12em; }
+    .section-title { font-size: 1.35em; margin-top: 32px; margin-bottom: 14px; border-bottom: 2px solid #2563eb; padding-bottom: 6px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 18px; font-size: 1.12em; }
+    th, td { border: 1.5px solid #2563eb; padding: 12px 14px; text-align: left; }
+    th { background: #2563eb; color: #fff; font-weight: 700; font-size: 1.15em; }
+    tr:nth-child(even) { background: #f3f6fa; }
+    </style>
+</head>
+<body>
+<div class="pdf-container">
+    <h1>Projeto: {{ projeto.nome }}</h1>
+    <table class="two-col">
+        <tr>
+            <td>
+                <div class="box-title">Identificação</div>
+                <p><strong>ID:</strong> {{ projeto.id }}</p>
+                <p><strong>Nome:</strong> {{ projeto.nome }}</p>
+                <p><strong>Área responsável:</strong> {{ projeto.area_responsavel }}</p>
+                <p><strong>Unidade:</strong> {{ projeto.unidade }}</p>
+                <p><strong>Data de Criação:</strong> {{ projeto.data_criacao|date:'d/m/Y H:i' }}</p>
+            </td>
+            <td>
+                <div class="box-title">Execução</div>
+                <p><strong>Responsável:</strong> {{ projeto.responsavel }}</p>
+                <p><strong>Status (%):</strong> {{ status_percent }}%</p>
+                <p><strong>Data início:</strong> {{ projeto.data_inicio|date:'d/m/Y' }}</p>
+                <p><strong>Data fim:</strong> {{ projeto.data_fim|date:'d/m/Y' }}</p>
+                <p><strong>Observação:</strong> {{ projeto.observacao|default:'-' }}</p>
+            </td>
+        </tr>
+    </table>
+    <div>
+        <div class="section-title">Tarefas Associadas</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Responsável</th>
+                    <th>Data Início</th>
+                    <th>Data Fim</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for tarefa in tarefas %}
+                <tr>
+                    <td>{{ tarefa.id }}</td>
+                    <td>{{ tarefa.nome }}</td>
+                    <td>{{ tarefa.responsavel }}</td>
+                    <td>{{ tarefa.data_inicio|date:'d/m/Y' }}</td>
+                    <td>{{ tarefa.data_fim|date:'d/m/Y' }}</td>
+                    <td>{% if tarefa.status %}{{ tarefa.status }}{% else %}0%{% endif %}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="6">Nenhuma tarefa associada.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
